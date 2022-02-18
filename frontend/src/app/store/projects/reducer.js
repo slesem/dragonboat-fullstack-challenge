@@ -9,7 +9,7 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_PROJECTS: {
       const data = action.payload || [];
-      console.log(data)
+
       return {
         ...state,
         byId: data.reduce((byId, p) => ({ ...byId, [p.id]: p }), state.byId),
@@ -32,12 +32,14 @@ const reducer = (state = initialState, action) => {
     case CREATE_PROJECT: {
       const data = action.payload;
 
-
       if (!data) return state;
-      const obj = { ...state.byId, ...{[data.id]: data}}
+
       return {
         ...state,
-        byId: obj,
+        byId: { 
+          ...state.byId, 
+          ...{[data.id]: data}
+        },
         ids: [...state.ids, data.id],
       };
     }
@@ -56,6 +58,7 @@ const reducer = (state = initialState, action) => {
 
     }
     case DELETE_PROJECT: {
+
       const deleteById = (byId, id) => {
         let objToDelete = {}
         for (let entry in byId) {
@@ -64,6 +67,7 @@ const reducer = (state = initialState, action) => {
             break;
           }
         }
+
         delete byId[objToDelete]
         return byId
       }

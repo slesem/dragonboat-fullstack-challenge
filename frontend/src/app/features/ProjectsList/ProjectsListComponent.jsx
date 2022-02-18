@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { Table, TableBody, TableContainer, TableCell, TableHead, TableRow, Button } from "@material-ui/core/";
+import { Table, TableBody, TableContainer, TableCell, TableHead, TableRow, Button, Box } from "@material-ui/core/";
 import Typography from "@material-ui/core/Typography";
 import { deleteProject } from "../../store/projects/actions";
 import { useDispatch } from "react-redux";
@@ -27,6 +27,11 @@ const Component = ({ projects }) => {
     setIsOpen(true)
   }
 
+  const closeModal = (e) => {
+    setIsOpen(false);
+    setProject({});
+    setType("")
+  }
 
   return (
     <>
@@ -39,8 +44,7 @@ const Component = ({ projects }) => {
               <TableCell>Author</TableCell>
               <TableCell>Start Date</TableCell>
               <TableCell>End Date</TableCell>
-              <TableCell sx={{ padding: 2}}></TableCell>
-              <TableCell sx={{}}></TableCell>              
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -51,32 +55,50 @@ const Component = ({ projects }) => {
                 <TableCell>{p.start_date}</TableCell>
                 <TableCell>{p.end_date}</TableCell>
                 <TableCell>
-                  <Button variant="outlined" onClick={() => openModal(p, 'Edit')}>
-                    Edit
-                  </Button>
-                </TableCell>
-                <TableCell>
-                  <Button variant="outlined" onClick={() => deleteProjectById(p.id)}>
-                    Delete
-                  </Button>
+                  <Box m={1}>
+                    <Button variant="outlined" onClick={() => openModal(p, 'Edit')}>
+                      Edit
+                    </Button>
+                  </Box>
+                  <Box>
+                    <Button variant="outlined" onClick={() => deleteProjectById(p.id)}>
+                      Delete
+                    </Button>
+                  </Box>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <div>
+      <Box m={2}>
         <Button variant="outlined" onClick={() => openModal(null, 'Add')}>
           Add Project
         </Button>
-      </div>
-      {isOpen && (<InputComponent project={project} type={type}> </InputComponent>)}
+      </Box>
+      {isOpen && (
+        <PopupModal>
+          <InputComponent project={project} type={type} closeModal={closeModal}></InputComponent>
+        </PopupModal>
+      )}
     </>
   );
 };
 
 const Title = styled(Typography)`
   padding: 20px 0 20px 13px;
+`;
+
+const PopupModal = styled.div`
+  z-index: auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  height: auto;
+  width: 50%;
+  background: rgba(192,192,192,0.3);
+  transform: translate(-50%,-50%);
+  backdrop-filter: blur(20px);
 `;
 
 export default Component;
