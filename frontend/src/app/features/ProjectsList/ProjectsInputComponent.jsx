@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { Typography, List, ListItem, TextField, Button, Box, FormControl } from "@material-ui/core/";
+import { Typography, List, ListItem, TextField, Button, Box } from "@material-ui/core/";
 import { updateProject, createProject } from "../../store/projects/actions";
 import { useDispatch } from "react-redux";
 
